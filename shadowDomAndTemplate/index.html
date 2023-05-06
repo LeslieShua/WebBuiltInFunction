@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Template</title>
+</head>
+<body>
+  
+
+<!--
+  내부적으로 여러개의 <div>가 숨겨져 있음
+  -확인방법 : F5 - [설정] - Show user agent shadow DOM(el)체크
+  - shadow DOM : 일반적으로는 볼 수 없는 숨겨진 HTML
+-->
+<input type="range">
+
+
+<!--
+  shadow DOM 만드는 방법
+  -attachShadow() 내장함수를 사용해서 shadowRoot 공간을 열어줍니다.
+-->
+<div class="model"></div>
+
+
+<custom-input></custom-input>
+<label>왜 나까지 빨개짐?</label>
+<br/>
+<custom-input2></custom-input2>
+<span>스팸태그</span>
+
+
+<template id="template1">
+  <span>비번 입력란</span><input>
+  <style> span { color : purple; font-weight: bold } </style>
+</template>
+
+<script>
+  const v1 = document.querySelector('.model');
+  v1.attachShadow({mode : 'open'});
+  v1.shadowRoot.innerHTML = '<p>내일 점심 너구리</p>'
+
+
+
+/**
+  Web Components + shadow DOM = 모듈 만드는 방법 
+  -web component 문법만 사용했을 때[기존 단점 style 오염되서 컴포넌트끼리 스타일이 겹침].
+  -shadow DOM에 있는 스타일은 밖에 영향을 끼치지 않아서 보완이됨.
+  -다른 모듈들이 서로 영향을 끼치는걸 막을 수 있습니다.
+*/
+
+//잘못된 예시
+class Yg extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `<label>아이디 입력란</label><input>
+      <style> label { color : red } </style>`
+  }
+}
+
+customElements.define("custom-input", Yg);
+
+//알맞은 예시 + template라는 태그를 이용해서 html따로 보관
+class Yg2 extends HTMLElement {
+  connectedCallback() {
+    this.attachShadow({mode : 'open'});
+    this.shadowRoot.append(template1.content.cloneNode(true));
+
+    //이벤트 리스너 부착
+    let el = this.shadowRoot.querySelector('span'); //label 넣으면 작동안됨
+    el.addEventListener('click', function(){
+      console.log('클릭')
+    })
+  }
+}
+customElements.define("custom-input2", Yg2);
+
+
+
+</script>
+
+
+
+
+</body>
+</html>
