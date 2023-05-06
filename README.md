@@ -18,8 +18,6 @@
 
 - this.shadowRoot.append(template1.content.cloneNode(true));
 
-* <template id="template1">Html Code </template>
-
-<!-- language: lang-html -->
-
-<span style="color: red;">This text will be red</span>
+```
+ <template id="template1">Html Code </template>
+```
