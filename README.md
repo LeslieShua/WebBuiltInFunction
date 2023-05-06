@@ -18,4 +18,4 @@
 
 - this.shadowRoot.append(template1.content.cloneNode(true));
 
-* <template id="template1">Html Code</template>
+* <!-- <template id="template1">Html Code</template> -->
