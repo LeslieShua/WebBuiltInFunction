@@ -17,3 +17,5 @@
 2. 템플릿으로 만들기
 
 - this.shadowRoot.append(template1.content.cloneNode(true));
+
+* <template id="template1">Html Code</template>
